@@ -13,7 +13,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
 
     public var defaultSize: CGFloat = 55
 
-    public var selectAction: ((Type) -> Void)?
+    public lazy var selectAction: ((Type) -> Void)? = { self.selected = $0 }
 
     public lazy var setUseful: (([Type]) -> Void) = { [self] in
         allSelection = $0
@@ -34,7 +34,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
 
     private var isOpened: Bool = false
     private var allSelection: [Type] = []
-    private var selected: Type? //  = .init(by: 0)
+    private var selected: Type = .init(by: 0)
     private var buttons: [Type: UIButton] = [:]
     // private lazy var closeAnchor: NSLayoutConstraint = view.widthAnchor.constraint(equalToConstant: defaultSize)
     // private lazy var openAnchor: NSLayoutConstraint = view.widthAnchor.constraint(equalToConstant: defaultSize)
