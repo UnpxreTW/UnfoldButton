@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "UnfoldButton",
+    platforms: [.iOS(.v12)],
     products: [
         .library(name: "UnfoldButton", targets: ["UnfoldButton"]),
     ],

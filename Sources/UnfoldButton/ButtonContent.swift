@@ -7,7 +7,7 @@
 //
 import UIKit
 
-public protocol ButtonContent: CaseIterable {
+public protocol ButtonContent: Hashable, CaseIterable {
 
     var contentImage: UIImage? { get }
 
