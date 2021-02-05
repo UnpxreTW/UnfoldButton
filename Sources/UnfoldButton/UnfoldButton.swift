@@ -34,7 +34,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
 
     private var isOpened: Bool = false
     private var allSelection: [Type] = []
-    private var selected: Type //  = .init(by: 0)
+    private var selected: Type? //  = .init(by: 0)
     private var buttons: [Type: UIButton] = [:]
     // private lazy var closeAnchor: NSLayoutConstraint = view.widthAnchor.constraint(equalToConstant: defaultSize)
     // private lazy var openAnchor: NSLayoutConstraint = view.widthAnchor.constraint(equalToConstant: defaultSize)
@@ -47,7 +47,6 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
 
     public init() {
         allSelection = Type.allCases.map { $0 }
-        selected = .init(by: 0)
         super.init(nibName: nil, bundle: nil)
         view.translatesAutoresizingMaskIntoConstraints = false
         loadAllButton()
