@@ -49,6 +49,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
         allSelection = Type.allCases.map { $0 }
         super.init(nibName: nil, bundle: nil)
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.masksToBounds = true
         loadAllButton()
         setOpenConstraint()
         setCloseConstraint()
