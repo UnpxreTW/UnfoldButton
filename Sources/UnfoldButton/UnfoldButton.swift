@@ -35,9 +35,12 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
 
     public lazy var closeAction: (() -> Void) = {
         DispatchQueue.main.async { [self] in
-            view.layoutIfNeeded()
-            // setConstraint(to: false)
-            UIViewPropertyAnimator(duration: 0.5, dampingRatio: 1) { view.layoutIfNeeded() }.startAnimation()
+            view.superview?.layoutIfNeeded()
+            NSLayoutConstraint.deactivate(openConstraints)
+            NSLayoutConstraint.activate(closeConstraints)
+            UIViewPropertyAnimator(duration: 0.5, dampingRatio: 1) {
+                view.superview?.layoutIfNeeded()
+            }.startAnimation()
         }
     }
 
