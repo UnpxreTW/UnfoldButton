@@ -27,6 +27,8 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
 
     // MARK: Public Variable
 
+    public weak var delegate: UnfoldButtonDelegate?
+
     public var buttonSize: CGFloat = 55
 
     public lazy var selectAction: ((Type) -> Void)? = { self.selected = $0 }
@@ -85,6 +87,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
 
     @objc private func tapButton(_ sender: UIButton) {
         DispatchQueue.main.async { [self] in
+            delegate?.taped()
             view.superview?.layoutIfNeeded()
             NSLayoutConstraint.deactivate(isOpened ? openConstraints : closeConstraints)
             NSLayoutConstraint.activate(isOpened ? closeConstraints : openConstraints)
