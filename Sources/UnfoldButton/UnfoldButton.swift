@@ -92,6 +92,11 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    public override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        backgroundView?.frame = view.frame
+    }
+
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         print("Test")
