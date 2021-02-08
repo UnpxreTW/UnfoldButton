@@ -20,6 +20,7 @@ private extension UIColor {
 
 public protocol UnfoldButtonDelegate: AnyObject {
 
+    func taped()
 }
 
 public final class UnfoldButton<Type: ButtonContent>: UIViewController {
