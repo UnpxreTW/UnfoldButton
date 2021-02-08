@@ -96,7 +96,11 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
             view.superview?.layoutIfNeeded()
             NSLayoutConstraint.deactivate(isOpened ? openConstraints : closeConstraints)
             NSLayoutConstraint.activate(isOpened ? closeConstraints : openConstraints)
-            if !isOpened { delegate?.taped() }
+            if isOpened {
+                selected = Type.init(by: sender.tag)
+            } else {
+                delegate?.taped()
+            }
             isOpened.toggle()
             UIViewPropertyAnimator(duration: 0.5, dampingRatio: 1) {
                 view.superview?.layoutIfNeeded()
