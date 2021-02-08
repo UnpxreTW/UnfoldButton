@@ -127,5 +127,6 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
             }
             lastButton = button
         }
+        closeConstraints.append(view.widthAnchor.constraint(equalToConstant: defaultSize))
     }
 }
