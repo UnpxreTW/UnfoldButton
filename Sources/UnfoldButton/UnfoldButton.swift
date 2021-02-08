@@ -20,7 +20,7 @@ private extension UIColor {
 
 public protocol UnfoldButtonDelegate: AnyObject {
 
-    func taped()
+    func tapped<Type: ButtonContent>(_ selected: Type?)
 }
 
 public final class UnfoldButton<Type: ButtonContent>: UIViewController {
@@ -98,9 +98,8 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
             if isOpened {
                 selected = Type.init(by: sender.tag)
                 setCloseConstraint()
-            } else {
-                delegate?.taped()
             }
+            delegate?.tapped(isOpened ? selected : nil)
             NSLayoutConstraint.activate(isOpened ? closeConstraints : openConstraints)
             isOpened.toggle()
             UIViewPropertyAnimator(duration: 0.5, dampingRatio: 1) {
