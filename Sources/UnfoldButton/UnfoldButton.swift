@@ -54,6 +54,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
                 view.superview?.layoutIfNeeded()
             }.startAnimation()
         }
+        isOpened = false
     }
 
     // MARK: Private Variable
