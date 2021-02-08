@@ -88,6 +88,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
     @objc private func tapButton(_ sender: UIButton) {
         DispatchQueue.main.async { [self] in
             delegate?.taped()
+            isOpened.toggle()
             view.superview?.layoutIfNeeded()
             NSLayoutConstraint.deactivate(isOpened ? openConstraints : closeConstraints)
             NSLayoutConstraint.activate(isOpened ? closeConstraints : openConstraints)
