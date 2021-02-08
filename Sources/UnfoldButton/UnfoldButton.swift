@@ -33,7 +33,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
         setOpenConstraint()
     }
 
-    public lazy var closeAction: (() -> Void) = {
+    public lazy var closeAction: ((Bool) -> Void) = { _ in
         DispatchQueue.main.async { [self] in
             view.superview?.layoutIfNeeded()
             NSLayoutConstraint.deactivate(openConstraints)
