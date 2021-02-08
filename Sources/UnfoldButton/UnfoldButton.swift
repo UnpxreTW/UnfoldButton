@@ -31,7 +31,11 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
 
     public var buttonSize: CGFloat = 55
 
-    public lazy var selectAction: ((Type) -> Void)? = { self.selected = $0 }
+    public lazy var selectAction: ((Type) -> Void)? = { [self] in
+        selected = $0
+        setOpenConstraint()
+        setCloseConstraint()
+    }
 
     public lazy var setUseful: (([Type]) -> Void) = { [self] in
         allSelection = $0
@@ -40,8 +44,9 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
         setOpenConstraint()
     }
 
-    public lazy var closeAction: ((Bool) -> Void) = { _ in
-        DispatchQueue.main.async { [self] in
+    public lazy var closeAction: ((Bool) -> Void) = { [self] _ in
+        guard isOpened else { return }
+        DispatchQueue.main.async {
             view.superview?.layoutIfNeeded()
             NSLayoutConstraint.deactivate(openConstraints)
             NSLayoutConstraint.activate(closeConstraints)
