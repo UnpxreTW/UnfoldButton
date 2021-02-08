@@ -159,16 +159,17 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
         var isLeading: Bool = true
         for selection in allSelection {
             guard let button = buttons[selection] else { continue }
-            if selection == selected {
-                closeConstraints.append(button.leadingAnchor.constraint(equalTo: view.leadingAnchor))
-                closeConstraints.append(view.trailingAnchor.constraint(equalTo: button.trailingAnchor))
-                isLeading = false
-            } else if let lastButton = lastButton {
+            if let lastButton = lastButton {
                 if isLeading {
                     closeConstraints.append(lastButton.trailingAnchor.constraint(equalTo: button.leadingAnchor))
                 } else {
                     closeConstraints.append(button.leadingAnchor.constraint(equalTo: lastButton.trailingAnchor))
                 }
+            }
+            if selection == selected {
+                closeConstraints.append(button.leadingAnchor.constraint(equalTo: view.leadingAnchor))
+                closeConstraints.append(view.trailingAnchor.constraint(equalTo: button.trailingAnchor))
+                isLeading = false
             }
             lastButton = button
         }
