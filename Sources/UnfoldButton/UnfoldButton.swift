@@ -101,7 +101,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
             lastButton = button
         }
         if let lastButton = lastButton {
-            openConstraints.append(view.leadingAnchor.constraint(equalTo: lastButton.trailingAnchor))
+            openConstraints.append(view.trailingAnchor.constraint(equalTo: lastButton.trailingAnchor))
         }
     }
 
