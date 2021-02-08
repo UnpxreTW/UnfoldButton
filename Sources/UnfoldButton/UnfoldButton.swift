@@ -86,6 +86,11 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
     public convenience init(with background: UIView) {
         self.init()
         backgroundView = background
+        DispatchQueue.main.async { [self] in
+            NSLayoutConstraint.activate([
+                background.widthAnchor.constraint(equalTo: view.widthAnchor)
+            ])
+        }
     }
 
     required init?(coder: NSCoder) {
