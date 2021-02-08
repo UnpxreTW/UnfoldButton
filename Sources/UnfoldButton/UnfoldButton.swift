@@ -94,12 +94,13 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
 
     public override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
+        print("Test1")
         backgroundView?.frame = view.frame
     }
 
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        print("Test")
+        print("Test2")
         backgroundView?.frame = view.frame
     }
 
