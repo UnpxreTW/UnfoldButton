@@ -63,13 +63,12 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
     private var allSelection: [Type] = []
     private var selected: Type = .init(by: 0)
     private var buttons: [Type: UIButton] = [:]
-
     private var closeConstraints: [NSLayoutConstraint] = []
     private var openConstraints: [NSLayoutConstraint] = []
 
     // MARK: Lifecycle
 
-    public init() {
+    public init(background: UIView) {
         allSelection = Type.allCases.map { $0 }
         super.init(nibName: nil, bundle: nil)
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -80,6 +79,12 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
         DispatchQueue.main.async { [self] in
             NSLayoutConstraint.activate([view.heightAnchor.constraint(equalToConstant: buttonSize)])
             NSLayoutConstraint.activate(closeConstraints)
+            NSLayoutConstraint.activate([
+                background.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                background.topAnchor.constraint(equalTo: view.topAnchor),
+                background.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+                background.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            ])
         }
     }
 
