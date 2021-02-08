@@ -36,9 +36,6 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
     private var allSelection: [Type] = []
     private var selected: Type = .init(by: 0)
     private var buttons: [Type: UIButton] = [:]
-    // private lazy var closeAnchor: NSLayoutConstraint = view.widthAnchor.constraint(equalToConstant: defaultSize)
-    // private lazy var openAnchor: NSLayoutConstraint = view.widthAnchor.constraint(equalToConstant: defaultSize)
-    // private var firstButtonAnchor: NSLayoutConstraint?
 
     private var closeConstraints: [NSLayoutConstraint] = []
     private var openConstraints: [NSLayoutConstraint] = []
