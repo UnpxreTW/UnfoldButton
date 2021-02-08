@@ -64,6 +64,17 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
 
     // MARK: Private Function
 
+    @objc private func tapButton(_ sender: UIButton) {
+        DispatchQueue.main.async { [self] in
+            view.superview?.layoutIfNeeded()
+            NSLayoutConstraint.deactivate(closeConstraints)
+            NSLayoutConstraint.activate(openConstraints)
+            UIViewPropertyAnimator(duration: 0.5, dampingRatio: 1) {
+                view.superview?.layoutIfNeeded()
+            }.startAnimation()
+        }
+    }
+
     private func cleanAllButton() {
         buttons.values.forEach { $0.removeFromSuperview() }
         buttons.removeAll()
@@ -75,6 +86,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
             button.translatesAutoresizingMaskIntoConstraints = false
             button.setImage(selection.contentImage?.withRenderingMode(.alwaysTemplate), for: .normal)
             button.tag = selection.contentIndex
+            button.addTarget(self, action: #selector(tapButton), for: .touchUpInside)
             DispatchQueue.main.async { [self] in
                 view.addSubview(button)
                 NSLayoutConstraint.activate([
