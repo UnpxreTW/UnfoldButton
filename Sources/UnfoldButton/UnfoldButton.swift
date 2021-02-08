@@ -173,6 +173,8 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
             }
             lastButton = button
         }
-        closeConstraints.append(view.widthAnchor.constraint(equalToConstant: buttonSize))
+        if let lastButton = lastButton {
+            closeConstraints.append(view.trailingAnchor.constraint(equalTo: lastButton.trailingAnchor))
+        }
     }
 }
