@@ -7,6 +7,17 @@
 //
 import UIKit
 
+private extension UIColor {
+
+    static var buttonColor: UIColor {
+        if #available(iOS 13.0, *) {
+            return label
+        } else {
+            return white
+        }
+    }
+}
+
 public final class UnfoldButton<Type: ButtonContent>: UIViewController {
 
     // MARK: Public Variable
@@ -67,8 +78,8 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
     @objc private func tapButton(_ sender: UIButton) {
         DispatchQueue.main.async { [self] in
             view.superview?.layoutIfNeeded()
-            NSLayoutConstraint.deactivate(closeConstraints)
-            NSLayoutConstraint.activate(openConstraints)
+            NSLayoutConstraint.deactivate(isOpened ? openConstraints : closeConstraints)
+            NSLayoutConstraint.activate(isOpened ? closeConstraints : openConstraints)
             UIViewPropertyAnimator(duration: 0.5, dampingRatio: 1) {
                 view.superview?.layoutIfNeeded()
             }.startAnimation()
@@ -84,6 +95,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
         for selection in allSelection {
             let button: UIButton = .init()
             button.translatesAutoresizingMaskIntoConstraints = false
+            button.tintColor = .buttonColor
             button.setImage(selection.contentImage?.withRenderingMode(.alwaysTemplate), for: .normal)
             button.tag = selection.contentIndex
             button.addTarget(self, action: #selector(tapButton), for: .touchUpInside)
