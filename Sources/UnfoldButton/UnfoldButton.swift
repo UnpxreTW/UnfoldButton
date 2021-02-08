@@ -65,6 +65,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
     private var buttons: [Type: UIButton] = [:]
     private var closeConstraints: [NSLayoutConstraint] = []
     private var openConstraints: [NSLayoutConstraint] = []
+    private var backgroundView: UIView?
 
     // MARK: Lifecycle
 
@@ -82,8 +83,18 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
         }
     }
 
+    public convenience init(with background: UIView) {
+        self.init()
+        backgroundView = background
+    }
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    public override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        backgroundView?.frame = view.frame
     }
 
     // MARK: Public Function
