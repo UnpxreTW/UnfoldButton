@@ -24,6 +24,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
         selected = $0
         setOpenConstraint()
         setCloseConstraint()
+        setAnimation()
     }
 
     public lazy var setUseful: (([Type]) -> Void) = { [self] in
