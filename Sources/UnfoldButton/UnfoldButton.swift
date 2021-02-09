@@ -92,8 +92,8 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
     // MARK: Private Function
 
     @objc private func tapButton(_ sender: UIButton) {
+        delegate?.tapped(isOpened ? selected : nil)
         setAnimation(to: !isOpened, select: sender.tag)
-        delegate?.tapped(!isOpened ? selected : nil)
     }
 
     private func setAnimation(to open: Bool? = nil, select: Int? = nil) {
