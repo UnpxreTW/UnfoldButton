@@ -94,6 +94,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
 
     @objc private func tapButton(_ sender: UIButton) {
         setAnimation(to: !isOpened, select: sender.tag)
+        delegate?.tapped(isOpened ? selected : nil)
     }
 
     private func setAnimation(to open: Bool? = nil, select: Int? = nil) {
