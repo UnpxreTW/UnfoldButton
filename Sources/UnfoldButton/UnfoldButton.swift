@@ -14,7 +14,7 @@ public protocol UnfoldButtonDelegate: AnyObject {
 
 public protocol UnfoldButtonAction: AnyObject {
 
-    associatedtype `Type`
+    associatedtype `Type`: ButtonContent
 
     var selectAction: ((Type) -> Void) { get }
 
