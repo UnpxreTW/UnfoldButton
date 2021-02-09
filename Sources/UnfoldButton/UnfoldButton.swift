@@ -104,6 +104,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
             if !toOpen {
                 select.isSome { selected = Type.init(by: $0) }
                 setCloseConstraint()
+                setOpenConstraint()
             }
             NSLayoutConstraint.activate(toOpen ? openConstraints : closeConstraints)
             isOpened = toOpen
