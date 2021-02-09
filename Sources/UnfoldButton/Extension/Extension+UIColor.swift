@@ -19,9 +19,9 @@ extension UIColor {
 
     static var hightlightColor: UIColor {
         if #available(iOS 13.0, *) {
-            return systemBackground
+            return label
         } else {
-            return black
+            return white
         }
     }
 }

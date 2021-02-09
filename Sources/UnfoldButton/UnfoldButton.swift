@@ -51,7 +51,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
         let view: UIView = .init()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.alpha = 0
-        view.backgroundColor = .hightlightColor
+        view.backgroundColor = .buttonColor
         return view
     }()
 
@@ -111,6 +111,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
                 view.superview?.layoutIfNeeded()
                 backgroundView?.frame.size = view.frame.size
                 highlightView.alpha = toOpen ? 1 : 0
+                buttons[selected]?.tintColor = toOpen ? .hightlightColor : .buttonColor
             }
             animator.addCompletion { if case .end = $0 { isOpened = toOpen } }
             animator.startAnimation()
