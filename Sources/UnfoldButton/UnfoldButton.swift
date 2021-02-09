@@ -14,11 +14,11 @@ public protocol UnfoldButtonDelegate: AnyObject {
 
 public protocol UnfoldButtonAction: AnyObject {
 
-    associatedtype T
+    associatedtype `Type`
 
-    var selectAction: ((T) -> Void) { get }
+    var selectAction: ((Type) -> Void) { get }
 
-    var setUseful: (([T]) -> Void) { get }
+    var setUseful: (([Type]) -> Void) { get }
 
     var closeAction: ((Bool) -> Void) { get }
 }
@@ -27,19 +27,17 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
 
     // MARK: Public Variable
 
-    public typealias T = Type
-
     public weak var delegate: UnfoldButtonDelegate?
 
     public var size: CGSize = .init(width: 55, height: 55)
 
-    public lazy var selectAction: ((T) -> Void) = { [self] in
+    public lazy var selectAction: ((Type) -> Void) = { [self] in
         selected = $0
         setConstraint()
         setAnimation()
     }
 
-    public lazy var setUseful: (([T]) -> Void) = { [self] in
+    public lazy var setUseful: (([Type]) -> Void) = { [self] in
         allSelection = $0
         resetAllButton()
         setConstraint()
