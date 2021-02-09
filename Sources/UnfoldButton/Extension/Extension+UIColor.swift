@@ -16,4 +16,12 @@ extension UIColor {
             return white
         }
     }
+
+    static var hightlightColor: UIColor {
+        if #available(iOS 13.0, *) {
+            return systemBackground
+        } else {
+            return black
+        }
+    }
 }

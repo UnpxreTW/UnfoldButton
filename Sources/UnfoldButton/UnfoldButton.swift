@@ -47,6 +47,13 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
     private var closeConstraints: [NSLayoutConstraint] = []
     private var openConstraints: [NSLayoutConstraint] = []
     private var backgroundView: UIView?
+    private lazy var highlightView: UIView = {
+        let view: UIView = .init()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.alpha = 0
+        view.backgroundColor = .hightlightColor
+        return view
+    }()
 
     // MARK: Lifecycle
 
@@ -55,11 +62,18 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
         super.init(nibName: nil, bundle: nil)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.masksToBounds = true
+        DispatchQueue.main.async { [self] in
+            view.addSubview(highlightView)
+        }
         loadAllButton()
         setOpenConstraint()
         setCloseConstraint()
         DispatchQueue.main.async { [self] in
-            NSLayoutConstraint.activate([view.heightAnchor.constraint(equalToConstant: size.height)])
+            NSLayoutConstraint.activate([
+                view.heightAnchor.constraint(equalToConstant: size.height),
+                highlightView.widthAnchor.constraint(equalToConstant: size.width),
+                highlightView.heightAnchor.constraint(equalToConstant: size.height)
+            ])
             NSLayoutConstraint.activate(closeConstraints)
         }
     }
@@ -95,6 +109,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
             let animator: UIViewPropertyAnimator = .init(duration: 0.5, dampingRatio: 1) {
                 view.superview?.layoutIfNeeded()
                 backgroundView?.frame.size = view.frame.size
+                highlightView.alpha = toOpen ? 1 : 0
             }
             animator.addCompletion { if case .end = $0 { isOpened = toOpen } }
             animator.startAnimation()
@@ -139,8 +154,9 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
             }
             lastButton = button
         }
-        if let lastButton = lastButton {
-            openConstraints.append(view.trailingAnchor.constraint(equalTo: lastButton.trailingAnchor))
+        lastButton.isSome { openConstraints.append(view.trailingAnchor.constraint(equalTo: $0.trailingAnchor)) }
+        buttons[selected].isSome {
+            openConstraints.append(highlightView.leadingAnchor.constraint(equalTo: $0.leadingAnchor))
         }
     }
 
@@ -152,15 +168,15 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
         for selection in allSelection {
             guard let button = buttons[selection] else { continue }
             if let lastButton = lastButton {
-                if isLeading {
-                    closeConstraints.append(lastButton.trailingAnchor.constraint(equalTo: button.leadingAnchor))
-                } else {
-                    closeConstraints.append(button.leadingAnchor.constraint(equalTo: lastButton.trailingAnchor))
-                }
+                closeConstraints.append(isLeading
+                    ? lastButton.trailingAnchor.constraint(equalTo: button.leadingAnchor)
+                    : button.leadingAnchor.constraint(equalTo: lastButton.trailingAnchor)
+                )
             }
             if selection == selected {
                 closeConstraints.append(button.leadingAnchor.constraint(equalTo: view.leadingAnchor))
                 closeConstraints.append(view.trailingAnchor.constraint(equalTo: button.trailingAnchor))
+                closeConstraints.append(highlightView.leadingAnchor.constraint(equalTo: button.leadingAnchor))
                 isLeading = false
             }
             lastButton = button
