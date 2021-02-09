@@ -52,6 +52,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
             NSLayoutConstraint.activate(closeConstraints)
             UIViewPropertyAnimator(duration: 0.5, dampingRatio: 1) {
                 view.superview?.layoutIfNeeded()
+                backgroundView?.frame.size = view.frame.size
             }.startAnimation()
         }
         isOpened = false
