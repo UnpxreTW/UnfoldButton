@@ -35,16 +35,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
 
     public lazy var closeAction: ((Bool) -> Void) = { [self] _ in
         guard isOpened else { return }
-        DispatchQueue.main.async {
-            view.superview?.layoutIfNeeded()
-            NSLayoutConstraint.deactivate(openConstraints)
-            NSLayoutConstraint.activate(closeConstraints)
-            UIViewPropertyAnimator(duration: 0.5, dampingRatio: 1) {
-                view.superview?.layoutIfNeeded()
-                backgroundView?.frame.size = view.frame.size
-            }.startAnimation()
-        }
-        isOpened = false
+        setAnimation(to: .close)
     }
 
     // MARK: Private Variable
@@ -87,20 +78,26 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
     // MARK: Private Function
 
     @objc private func tapButton(_ sender: UIButton) {
+        setAnimation(to: !isOpened, select: sender.tag)
+    }
+
+    private func setAnimation(to open: Bool? = nil, select: Int? = nil) {
+        let toOpen: Bool = open.or(isOpened)
         DispatchQueue.main.async { [self] in
             view.superview?.layoutIfNeeded()
-            NSLayoutConstraint.deactivate(isOpened ? openConstraints : closeConstraints)
-            if isOpened {
-                selected = Type.init(by: sender.tag)
+            NSLayoutConstraint.deactivate(toOpen ? closeConstraints : openConstraints)
+            if toOpen {
+                select.isSome { selected = Type.init(by: $0) }
                 setCloseConstraint()
             }
-            delegate?.tapped(isOpened ? selected : nil)
-            NSLayoutConstraint.activate(isOpened ? closeConstraints : openConstraints)
-            isOpened.toggle()
-            UIViewPropertyAnimator(duration: 0.5, dampingRatio: 1) {
+            NSLayoutConstraint.activate(toOpen ? openConstraints : closeConstraints)
+            isOpened = toOpen
+            let animator: UIViewPropertyAnimator = .init(duration: 0.5, dampingRatio: 1) {
                 view.superview?.layoutIfNeeded()
                 backgroundView?.frame.size = view.frame.size
-            }.startAnimation()
+            }
+            animator.addCompletion { if case .end = $0 { isOpened = toOpen } }
+            animator.startAnimation()
         }
     }
 
