@@ -7,17 +7,6 @@
 //
 import UIKit
 
-private extension UIColor {
-
-    static var buttonColor: UIColor {
-        if #available(iOS 13.0, *) {
-            return label
-        } else {
-            return white
-        }
-    }
-}
-
 public protocol UnfoldButtonDelegate: AnyObject {
 
     func tapped<Type: ButtonContent>(_ selected: Type?)
@@ -29,7 +18,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
 
     public weak var delegate: UnfoldButtonDelegate?
 
-    public var buttonSize: CGSize = .init(width: 55, height: 55)
+    public var size: CGSize = .init(width: 55, height: 55)
 
     public lazy var selectAction: ((Type) -> Void)? = { [self] in
         selected = $0
@@ -79,7 +68,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
         setOpenConstraint()
         setCloseConstraint()
         DispatchQueue.main.async { [self] in
-            NSLayoutConstraint.activate([view.heightAnchor.constraint(equalToConstant: buttonSize.height)])
+            NSLayoutConstraint.activate([view.heightAnchor.constraint(equalToConstant: size.height)])
             NSLayoutConstraint.activate(closeConstraints)
         }
     }
@@ -131,8 +120,8 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
             DispatchQueue.main.async { [self] in
                 view.addSubview(button)
                 NSLayoutConstraint.activate([
-                    button.widthAnchor.constraint(equalToConstant: buttonSize.width),
-                    button.heightAnchor.constraint(equalToConstant: buttonSize.height),
+                    button.widthAnchor.constraint(equalToConstant: size.width),
+                    button.heightAnchor.constraint(equalToConstant: size.height),
                     button.topAnchor.constraint(equalTo: view.topAnchor)
                 ])
             }
