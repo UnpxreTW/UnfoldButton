@@ -22,8 +22,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
 
     public lazy var selectAction: ((Type) -> Void)? = { [self] in
         selected = $0
-        setOpenConstraint()
-        setCloseConstraint()
+        setConstraint()
         setAnimation()
     }
 
@@ -31,7 +30,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
         allSelection = $0
         cleanAllButton()
         loadAllButton()
-        setOpenConstraint()
+        setConstraint()
     }
 
     public lazy var closeAction: ((Bool) -> Void) = { [self] _ in
@@ -67,8 +66,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
             view.addSubview(highlightView)
         }
         loadAllButton()
-        setOpenConstraint()
-        setCloseConstraint()
+        setConstraint()
         DispatchQueue.main.async { [self] in
             NSLayoutConstraint.activate([
                 view.heightAnchor.constraint(equalToConstant: size.height),
@@ -105,11 +103,9 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
             NSLayoutConstraint.deactivate(toOpen ? closeConstraints : openConstraints)
             if isOpened {
                 select.isSome { selected = Type.init(by: $0) }
-                setCloseConstraint()
-                setOpenConstraint()
+                setConstraint()
             }
             NSLayoutConstraint.activate(toOpen ? openConstraints : closeConstraints)
-            isOpened = toOpen
             let animator: UIViewPropertyAnimator = .init(duration: 0.5, dampingRatio: 1) {
                 view.superview?.layoutIfNeeded()
                 backgroundView?.frame.size = view.frame.size
@@ -144,6 +140,11 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
             }
             buttons.updateValue(button, forKey: selection)
         }
+    }
+
+    private func setConstraint() {
+        setOpenConstraint()
+        setCloseConstraint()
     }
 
     private func setOpenConstraint() {
