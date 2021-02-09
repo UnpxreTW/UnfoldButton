@@ -12,7 +12,18 @@ public protocol UnfoldButtonDelegate: AnyObject {
     func tapped<Type: ButtonContent>(_ selected: Type?)
 }
 
-public final class UnfoldButton<Type: ButtonContent>: UIViewController {
+public protocol UnfoldButtonAction: AnyObject {
+
+    associatedtype T
+
+    var selectAction: ((T) -> Void) { get }
+
+    var setUseful: (([T]) -> Void) { get }
+
+    var closeAction: ((Bool) -> Void) { get }
+}
+
+public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldButtonAction {
 
     // MARK: Public Variable
 
@@ -20,7 +31,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
 
     public var size: CGSize = .init(width: 55, height: 55)
 
-    public lazy var selectAction: ((Type) -> Void)? = { [self] in
+    public lazy var selectAction: ((Type) -> Void) = { [self] in
         selected = $0
         setConstraint()
         setAnimation()
@@ -28,8 +39,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
 
     public lazy var setUseful: (([Type]) -> Void) = { [self] in
         allSelection = $0
-        cleanAllButton()
-        loadAllButton()
+        resetAllButton()
         setConstraint()
     }
 
@@ -117,9 +127,10 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
         }
     }
 
-    private func cleanAllButton() {
+    private func resetAllButton() {
         buttons.values.forEach { $0.removeFromSuperview() }
         buttons.removeAll()
+        loadAllButton()
     }
 
     private func loadAllButton() {
