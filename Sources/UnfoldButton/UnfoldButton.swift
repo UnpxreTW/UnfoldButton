@@ -72,7 +72,8 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
             NSLayoutConstraint.activate([
                 view.heightAnchor.constraint(equalToConstant: size.height),
                 highlightView.widthAnchor.constraint(equalToConstant: size.width),
-                highlightView.heightAnchor.constraint(equalToConstant: size.height)
+                highlightView.heightAnchor.constraint(equalToConstant: size.height),
+                highlightView.topAnchor.constraint(equalTo: view.topAnchor)
             ])
             NSLayoutConstraint.activate(closeConstraints)
         }
