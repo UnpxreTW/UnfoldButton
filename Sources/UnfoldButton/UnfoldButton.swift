@@ -95,7 +95,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
 
     @objc private func tapButton(_ sender: UIButton) {
         setAnimation(to: !isOpened, select: sender.tag)
-        delegate?.tapped(isOpened ? selected : nil)
+        delegate?.tapped(!isOpened ? selected : nil)
     }
 
     private func setAnimation(to open: Bool? = nil, select: Int? = nil) {
@@ -103,7 +103,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
         DispatchQueue.main.async { [self] in
             view.superview?.layoutIfNeeded()
             NSLayoutConstraint.deactivate(toOpen ? closeConstraints : openConstraints)
-            if open == false {
+            if isOpened {
                 select.isSome { selected = Type.init(by: $0) }
                 setCloseConstraint()
                 setOpenConstraint()
