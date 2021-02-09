@@ -101,7 +101,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController {
         DispatchQueue.main.async { [self] in
             view.superview?.layoutIfNeeded()
             NSLayoutConstraint.deactivate(toOpen ? closeConstraints : openConstraints)
-            if toOpen {
+            if !toOpen {
                 select.isSome { selected = Type.init(by: $0) }
                 setCloseConstraint()
             }
