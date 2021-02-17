@@ -29,6 +29,8 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
 
     public weak var delegate: UnfoldButtonDelegate?
 
+    public var frame: CGRect { view.frame }
+
     public var size: CGSize = .init(width: 55, height: 55)
 
     public lazy var selectAction: ((Type) -> Void)? = { [self] in
