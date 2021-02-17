@@ -47,7 +47,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
     }
 
     public lazy var closeAction: ((Bool) -> Void) = { [self] _ in
-        guard isOpened else { return }
+        guard isOpened || opening else { return }
         setAnimation(to: .close)
     }
 
@@ -61,6 +61,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
     private var openConstraints: [NSLayoutConstraint] = []
     private var backgroundView: UIView?
     private var animating: Bool = false
+    private var opening: Bool = false
     private lazy var highlightView: UIView = {
         let view: UIView = .init()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -124,6 +125,8 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
             if isOpened {
                 select.isSome { selected = Type.init(by: $0) }
                 setConstraint()
+            } else if toOpen {
+                opening = true
             }
             NSLayoutConstraint.activate(toOpen ? openConstraints : closeConstraints)
             let animator: UIViewPropertyAnimator = .init(duration: 0.5, dampingRatio: 0.8) {
@@ -136,6 +139,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
                 if case .end = $0 {
                     isOpened = toOpen
                     animating = false
+                    opening = false
                 }
             }
             animator.startAnimation()
