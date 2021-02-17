@@ -187,22 +187,22 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
         NSLayoutConstraint.deactivate(closeConstraints)
         closeConstraints.removeAll()
         var lastButton: UIButton?
-        var isLeading: Bool = true
         for selection in allSelection {
             guard let button = buttons[selection] else { continue }
             if let lastButton = lastButton {
-                closeConstraints.append(isLeading
+                closeConstraints.append(selection < selection
                     ? lastButton.trailingAnchor.constraint(equalTo: button.leadingAnchor, constant: -safeInset)
                     : button.leadingAnchor.constraint(equalTo: lastButton.trailingAnchor)
                 )
             }
-            if selection == selected {
-                closeConstraints.append(button.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: safeInset))
-                closeConstraints.append(view.trailingAnchor.constraint(equalTo: button.trailingAnchor))
-                closeConstraints.append(highlightView.leadingAnchor.constraint(equalTo: button.leadingAnchor))
-                isLeading = false
-            }
             lastButton = button
+        }
+        buttons[selected].isSome {
+            closeConstraints.append(contentsOf: [
+                $0.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: safeInset),
+                view.trailingAnchor.constraint(equalTo: $0.trailingAnchor),
+                highlightView.leadingAnchor.constraint(equalTo: $0.leadingAnchor)
+            ])
         }
     }
 }
