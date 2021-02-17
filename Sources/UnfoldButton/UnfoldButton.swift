@@ -185,7 +185,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
             guard let button = buttons[selection] else { continue }
             if let lastButton = lastButton {
                 closeConstraints.append(isLeading
-                    ? lastButton.trailingAnchor.constraint(equalTo: button.leadingAnchor, constant: safeInset)
+                    ? lastButton.trailingAnchor.constraint(equalTo: button.leadingAnchor, constant: -safeInset)
                     : button.leadingAnchor.constraint(equalTo: lastButton.trailingAnchor)
                 )
             }
