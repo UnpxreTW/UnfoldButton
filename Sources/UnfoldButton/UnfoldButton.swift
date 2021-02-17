@@ -64,6 +64,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
         view.backgroundColor = .buttonColor
         return view
     }()
+    private var safeInset: CGFloat { view.safeAreaInsets.left }
 
     // MARK: Lifecycle
 
@@ -105,7 +106,6 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
     }
 
     private func setAnimation(to open: Bool? = nil, select: Int? = nil) {
-        print(view.safeAreaInsets.left)
         let toOpen: Bool = open.or(isOpened)
         DispatchQueue.main.async { [self] in
             view.superview?.layoutIfNeeded()
@@ -166,7 +166,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
             if let lastButton = lastButton {
                 openConstraints.append(button.leadingAnchor.constraint(equalTo: lastButton.trailingAnchor))
             } else {
-                openConstraints.append(button.leadingAnchor.constraint(equalTo: view.leadingAnchor))
+                openConstraints.append(button.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: safeInset))
             }
             lastButton = button
         }
@@ -185,12 +185,12 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
             guard let button = buttons[selection] else { continue }
             if let lastButton = lastButton {
                 closeConstraints.append(isLeading
-                    ? lastButton.trailingAnchor.constraint(equalTo: button.leadingAnchor)
+                    ? lastButton.trailingAnchor.constraint(equalTo: button.leadingAnchor, constant: safeInset)
                     : button.leadingAnchor.constraint(equalTo: lastButton.trailingAnchor)
                 )
             }
             if selection == selected {
-                closeConstraints.append(button.leadingAnchor.constraint(equalTo: view.leadingAnchor))
+                closeConstraints.append(button.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: safeInset))
                 closeConstraints.append(view.trailingAnchor.constraint(equalTo: button.trailingAnchor))
                 closeConstraints.append(highlightView.leadingAnchor.constraint(equalTo: button.leadingAnchor))
                 isLeading = false
