@@ -47,7 +47,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
     }
 
     public lazy var closeAction: ((Bool) -> Void) = { [self] _ in
-        guard isOpened else { return }
+        // guard isOpened else { return }
         setAnimation(to: .close)
     }
 
