@@ -126,7 +126,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
                 view.superview?.layoutIfNeeded()
                 backgroundView?.frame = view.frame
                 highlightView.alpha = toOpen ? 1 : 0
-                buttons.forEach { $1.tintColor = toOpen && $0 == selected ? .hightlightColor : .buttonColor }
+                buttons.forEach { $1.tintColor = (toOpen && $0 == selected) ? .hightlightColor : .buttonColor }
             }
             animator.addCompletion { if case .end = $0 { isOpened = toOpen } }
             animator.startAnimation()
@@ -201,7 +201,9 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
             guard let button = buttons[selection] else { continue }
             if let lastButton = lastButton {
                 closeConstraints.append(isLeading
-                    ? lastButton.trailingAnchor.constraint(equalTo: button.leadingAnchor, constant: -safeInset)
+                    ? lastButton.trailingAnchor.constraint(
+                        equalTo: button.leadingAnchor,
+                        constant: selection == selected ? -safeInset : 0)
                     : button.leadingAnchor.constraint(equalTo: lastButton.trailingAnchor)
                 )
             }
