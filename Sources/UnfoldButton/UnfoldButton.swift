@@ -98,6 +98,11 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
         fatalError("init(coder:) has not been implemented")
     }
 
+    public override func viewSafeAreaInsetsDidChange() {
+        setConstraint()
+        setAnimation()
+    }
+
     // MARK: Private Function
 
     @objc private func tapButton(_ sender: UIButton) {
