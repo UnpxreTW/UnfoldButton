@@ -97,8 +97,6 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: Public Function
-
     // MARK: Private Function
 
     @objc private func tapButton(_ sender: UIButton) {
@@ -107,6 +105,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
     }
 
     private func setAnimation(to open: Bool? = nil, select: Int? = nil) {
+        print(view.safeAreaInsets.left)
         let toOpen: Bool = open.or(isOpened)
         DispatchQueue.main.async { [self] in
             view.superview?.layoutIfNeeded()
