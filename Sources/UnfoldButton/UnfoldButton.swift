@@ -47,7 +47,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
     }
 
     public lazy var closeAction: ((Bool) -> Void) = { [self] _ in
-        // guard isOpened else { return }
+        guard isOpened else { return }
         setAnimation(to: .close)
     }
 
@@ -60,6 +60,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
     private var closeConstraints: [NSLayoutConstraint] = []
     private var openConstraints: [NSLayoutConstraint] = []
     private var backgroundView: UIView?
+    private var animating: Bool = false
     private lazy var highlightView: UIView = {
         let view: UIView = .init()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -109,12 +110,14 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
     // MARK: Private Function
 
     @objc private func tapButton(_ sender: UIButton) {
+        guard !animating else { return }
         delegate?.tapped(isOpened ? selected : nil)
         setAnimation(to: !isOpened, select: sender.tag)
     }
 
     private func setAnimation(to open: Bool? = nil, select: Int? = nil) {
         let toOpen: Bool = open.or(isOpened)
+        animating = true
         DispatchQueue.main.async { [self] in
             view.superview?.layoutIfNeeded()
             NSLayoutConstraint.deactivate(toOpen ? closeConstraints : openConstraints)
@@ -123,13 +126,18 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
                 setConstraint()
             }
             NSLayoutConstraint.activate(toOpen ? openConstraints : closeConstraints)
-            let animator: UIViewPropertyAnimator = .init(duration: 0.5, dampingRatio: 1) {
+            let animator: UIViewPropertyAnimator = .init(duration: 0.5, dampingRatio: 0.8) {
                 view.superview?.layoutIfNeeded()
                 backgroundView?.frame = view.frame
                 highlightView.alpha = toOpen ? 1 : 0
                 buttons.forEach { $1.tintColor = (toOpen && $0 == selected) ? .hightlightColor : .buttonColor }
             }
-            animator.addCompletion { if case .end = $0 { isOpened = toOpen } }
+            animator.addCompletion {
+                if case .end = $0 {
+                    isOpened = toOpen
+                    animating = false
+                }
+            }
             animator.startAnimation()
         }
     }
