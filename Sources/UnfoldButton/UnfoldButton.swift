@@ -34,6 +34,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
     public var size: CGSize = .init(width: 55, height: 55)
 
     public lazy var selectAction: ((Type) -> Void)? = { [self] in
+        guard selected != $0 else { return }
         selected = $0
         setConstraint()
         setAnimation()
