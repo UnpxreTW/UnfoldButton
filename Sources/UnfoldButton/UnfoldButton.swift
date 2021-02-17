@@ -190,6 +190,13 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
         closeConstraints.removeAll()
         var lastButton: UIButton?
         var isLeading: Bool = true
+        buttons[selected].isSome {
+            closeConstraints.append(contentsOf: [
+                $0.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: safeInset),
+                view.trailingAnchor.constraint(equalTo: $0.trailingAnchor),
+                highlightView.leadingAnchor.constraint(equalTo: $0.leadingAnchor)
+            ])
+        }
         for selection in allSelection {
             guard let button = buttons[selection] else { continue }
             if let lastButton = lastButton {
@@ -200,13 +207,6 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
             }
             if selection == selected { isLeading = false }
             lastButton = button
-        }
-        buttons[selected].isSome {
-            closeConstraints.append(contentsOf: [
-                $0.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: safeInset),
-                view.trailingAnchor.constraint(equalTo: $0.trailingAnchor),
-                highlightView.leadingAnchor.constraint(equalTo: $0.leadingAnchor)
-            ])
         }
     }
 }
