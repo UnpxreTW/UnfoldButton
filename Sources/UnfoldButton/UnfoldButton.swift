@@ -118,7 +118,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
             NSLayoutConstraint.activate(toOpen ? openConstraints : closeConstraints)
             let animator: UIViewPropertyAnimator = .init(duration: 0.5, dampingRatio: 1) {
                 view.superview?.layoutIfNeeded()
-                backgroundView?.frame.size = view.frame.size
+                backgroundView?.frame = view.frame
                 highlightView.alpha = toOpen ? 1 : 0
                 buttons.forEach { $1.tintColor = toOpen && $0 == selected ? .hightlightColor : .buttonColor }
             }
