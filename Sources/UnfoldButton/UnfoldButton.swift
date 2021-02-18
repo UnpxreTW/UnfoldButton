@@ -70,6 +70,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
         return view
     }()
     private var safeInset: CGFloat { view.safeAreaInsets.left }
+    private var animator: UIViewPropertyAnimator?
 
     // MARK: Lifecycle
 
@@ -120,6 +121,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
         let toOpen: Bool = open.or(isOpened)
         animating = true
         DispatchQueue.main.async { [self] in
+            animator?.stopAnimation(false)
             view.superview?.layoutIfNeeded()
             NSLayoutConstraint.deactivate(toOpen ? closeConstraints : openConstraints)
             if isOpened {
@@ -129,20 +131,20 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
                 opening = true
             }
             NSLayoutConstraint.activate(toOpen ? openConstraints : closeConstraints)
-            let animator: UIViewPropertyAnimator = .init(duration: 0.5, dampingRatio: 0.8) {
+            animator = .init(duration: 0.5, dampingRatio: 0.8) {
                 view.superview?.layoutIfNeeded()
                 backgroundView?.frame = view.frame
                 highlightView.alpha = toOpen ? 1 : 0
                 buttons.forEach { $1.tintColor = (toOpen && $0 == selected) ? .hightlightColor : .buttonColor }
             }
-            animator.addCompletion {
+            animator?.addCompletion {
                 if case .end = $0 {
                     isOpened = toOpen
                     animating = false
                     opening = false
                 }
             }
-            animator.startAnimation()
+            animator?.startAnimation()
         }
     }
 
