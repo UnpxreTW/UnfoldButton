@@ -109,8 +109,12 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
 
     // MARK: Private Function
 
+    private func test() {
+        print("isOpened \(isOpened), opening: \(opening), selected: \(selected)")
+    }
+
     @objc private func tapButton(_ sender: UIButton) {
-        delegate?.tapped(Optional<Type>.none)
+        test()
         if isOpened || opening {
             selected = Type(by: sender.tag)
         }
@@ -128,8 +132,8 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
                 opening = false
                 setConstraint()
             } else if toOpen {
-                isOpened = false
                 opening = true
+                delegate?.tapped(select)
             } else {
                 isOpened = false
                 opening = false
