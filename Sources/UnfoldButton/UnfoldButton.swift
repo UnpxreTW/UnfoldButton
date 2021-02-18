@@ -113,15 +113,15 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
         if isOpened || opening {
             selected = Type(by: sender.tag)
         }
-        setAnimation(to: !(isOpened || opening), select: sender.tag)
-        delegate?.tapped(isOpened || opening ? selected : nil)
+        setAnimation(to: !(isOpened || opening), select: selected)
     }
 
-    private func setAnimation(to open: Bool? = nil, select: Int? = nil) {
+    private func setAnimation(to open: Bool? = nil, select: Type? = nil) {
         let toOpen: Bool = open.or(isOpened)
         DispatchQueue.main.async { [self] in
             view.superview?.layoutIfNeeded()
             NSLayoutConstraint.deactivate(toOpen ? closeConstraints : openConstraints)
+            delegate?.tapped(isOpened || opening ? select : nil)
             if isOpened || opening {
                 opening = false
                 setConstraint()
