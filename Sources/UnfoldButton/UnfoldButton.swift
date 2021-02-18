@@ -130,6 +130,8 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
                 setConstraint()
             } else if toOpen {
                 opening = true
+            } else {
+                opening = false
             }
             NSLayoutConstraint.activate(toOpen ? openConstraints : closeConstraints)
             animator = .init(duration: 0.5, dampingRatio: 0.8) {
