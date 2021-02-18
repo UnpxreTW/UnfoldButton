@@ -60,7 +60,6 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
     private var closeConstraints: [NSLayoutConstraint] = []
     private var openConstraints: [NSLayoutConstraint] = []
     private var backgroundView: UIView?
-    private var animating: Bool = false
     private var opening: Bool = false
     private lazy var highlightView: UIView = {
         let view: UIView = .init()
@@ -119,11 +118,11 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
 
     private func setAnimation(to open: Bool? = nil, select: Int? = nil) {
         let toOpen: Bool = open.or(isOpened)
-        animating = true
         DispatchQueue.main.async { [self] in
             view.superview?.layoutIfNeeded()
             NSLayoutConstraint.deactivate(toOpen ? closeConstraints : openConstraints)
             if isOpened || opening {
+                opening = false
                 select.isSome { selected = Type.init(by: $0) }
                 setConstraint()
             } else if toOpen {
@@ -139,7 +138,6 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
             animator?.addCompletion {
                 if case .end = $0 {
                     isOpened = toOpen
-                    animating = false
                     opening = false
                 }
             }
