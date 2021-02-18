@@ -121,7 +121,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
         let toOpen: Bool = open.or(isOpened)
         animating = true
         DispatchQueue.main.async { [self] in
-            animator?.stopAnimation(true)
+            // animator?.stopAnimation(true)
             view.superview?.layoutIfNeeded()
             NSLayoutConstraint.deactivate(toOpen ? closeConstraints : openConstraints)
             if isOpened {
