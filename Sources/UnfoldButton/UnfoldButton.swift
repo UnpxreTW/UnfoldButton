@@ -127,6 +127,7 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
                 setConstraint()
             } else if toOpen {
                 delegate?.tapped(Optional<Type>.none)
+                isOpened = false
                 opening = true
             } else {
                 isOpened = false
