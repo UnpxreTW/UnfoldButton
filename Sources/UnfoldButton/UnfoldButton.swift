@@ -121,11 +121,12 @@ public final class UnfoldButton<Type: ButtonContent>: UIViewController, UnfoldBu
         DispatchQueue.main.async { [self] in
             view.superview?.layoutIfNeeded()
             NSLayoutConstraint.deactivate(toOpen ? closeConstraints : openConstraints)
-            delegate?.tapped(isOpened || opening ? select : nil)
             if isOpened || opening {
+                delegate?.tapped(select)
                 opening = false
                 setConstraint()
             } else if toOpen {
+                delegate?.tapped(Optional<Type>.none)
                 opening = true
             } else {
                 opening = false
